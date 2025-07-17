@@ -1,0 +1,20 @@
+
+---
+
+### 🐍 `logshard/router.py`
+```python
+import socket
+from hasher import get_shard
+from forwarder import forward_log
+from config import SHARDS
+
+UDP_PORT = 4444
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind(("", UDP_PORT))
+print(f"[Router] Listening on port {UDP_PORT}")
+
+while True:
+    data, addr = sock.recvfrom(4096)
+    log_line = data.decode()
+    shard = get_shard(log_line, SHARDS)
+    forward_log(shard, log_line)
