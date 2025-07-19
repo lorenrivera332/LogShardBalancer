@@ -1,0 +1,6 @@
+import hashlib
+
+def get_shard(log_line: str, shard_list: list) -> str:
+    h = hashlib.md5(log_line.encode()).hexdigest()
+    index = int(h, 16) % len(shard_list)
+    return shard_list[index]
